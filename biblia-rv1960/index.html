@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblia Cristiana RV1960 | Life Code Studios</title>
+    <link rel="icon" type="image/x-icon" href="resources/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        burgundy: '#800000',
+                        gold: '#D4AF37',
+                        bone: '#FDF8F0',
+                        'dark-sepia': '#2D1E1E',
+                        'muted-sepia': '#5D4037',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --burgundy: #800000;
+            --gold: #D4AF37;
+            --bone: #FDF8F0;
+            --dark-sepia: #2D1E1E;
+            --muted-sepia: #5D4037;
+            --gold-light: #f1d592;
+            --white: #ffffff;
+        }
+
+        body {
+            background-color: var(--bone);
+            color: var(--dark-sepia);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .bible-font {
+            font-family: 'Playfair Display', serif;
+            color: var(--burgundy);
+        }
+
+        /* --- Estilos del Loader Elegante --- */
+        #loader-wrapper {
+            position: fixed;
+            inset: 0;
+            background: var(--bone);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        .loader-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 2rem;
+            animation: softPulse 2s infinite ease-in-out;
+            filter: drop-shadow(0 0 15px rgba(128, 0, 0, 0.2));
+        }
+
+        .progress-container {
+            width: 250px;
+            height: 4px;
+            background: rgba(128, 0, 0, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--burgundy);
+            box-shadow: 0 0 10px rgba(128, 0, 0, 0.3);
+            transition: width 0.4s ease;
+        }
+
+        @keyframes softPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+        }
+
+        /* --- Estilos de la Web --- */
+        .gold-gradient {
+            background: linear-gradient(135deg, var(--burgundy) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass {
+            background: rgba(253, 248, 240, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(128, 0, 0, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        .btn-premium {
+            background: var(--burgundy);
+            color: white !important;
+            border: 1px solid var(--gold);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(128, 0, 0, 0.2);
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(128, 0, 0, 0.4);
+            background: #a00000;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--burgundy);
+            color: var(--burgundy) !important;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--burgundy);
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(128, 0, 0, 0.15);
+        }
+
+        /* --- Carrusel Infinito Real --- */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 3rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 2rem;
+            transition: transform 0.5s ease-out;
+            will-change: transform;
+            padding: 0 2rem;
+        }
+
+        .carousel-slide {
+            flex: 0 0 auto;
+            width: 300px;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            opacity: 0.5;
+            transform: scale(0.85);
+            border: 1px solid rgba(128, 0, 0, 0.05);
+            background: white;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            transform: scale(1.05);
+            border-color: var(--gold);
+            box-shadow: 0 25px 60px rgba(128, 0, 0, 0.15), 0 0 30px rgba(212, 175, 55, 0.2);
+            z-index: 10;
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 550px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2.5rem 1.5rem 1.5rem;
+            background: linear-gradient(transparent, rgba(128, 0, 0, 0.95));
+            color: white;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .carousel-slide.active .slide-caption {
+            opacity: 1;
+        }
+
+        /* Modal fixes */
+        #modal,
+        #image-modal {
+            display: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        #modal.active,
+        #image-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid rgba(128, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .feature-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px rgba(128, 0, 0, 0.1);
+        }
+
+        .content-fade {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        .content-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Nav specific fix */
+        .nav-btn-burgundy {
+            background: var(--burgundy);
+            color: white !important;
+            box-shadow: 0 4px 10px rgba(128, 0, 0, 0.2);
+        }
+
+        .nav-btn-burgundy:hover {
+            background: #a00000;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .carousel-slide {
+                width: 250px;
+            }
+
+            .carousel-image {
+                height: 450px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loader-wrapper">
+        <img src="resources/logo.png" alt="Logo" class="loader-logo">
+        <div class="progress-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <div class="mt-4 text-xs font-mono tracking-widest uppercase text-burgundy font-bold">Inspirando tu día</div>
+    </div>
+
+    <nav class="fixed w-full z-50 glass px-4 md:px-10 py-4 flex justify-between items-center transition-all">
+        <div class="flex items-center gap-4">
+            <a href="../index.html" class="hover:opacity-70 transition-opacity"><img src="resources/logo.png" alt="Logo"
+                    class="w-10 h-10 object-contain rounded-lg"></a>
+            <span class="text-xl font-bold tracking-tight hidden md:block bible-font">Biblia <span
+                    class="text-gold">RV1960</span></span>
+        </div>
+
+        <div class="flex gap-4">
+            <a href="https://biblia-cristiana.vercel.app/" target="_blank"
+                class="px-5 py-2 rounded-xl border-2 border-burgundy text-burgundy font-bold hover:bg-burgundy hover:text-white transition-all text-sm flex items-center gap-2">
+                <i class="fas fa-globe"></i> <span class="hidden sm:inline">Versión en Línea</span>
+            </a>
+            <button onclick="toggleModal()"
+                class="px-6 py-2 rounded-xl nav-btn-burgundy font-bold transition-all text-sm flex items-center gap-2 border border-gold/30">
+                <i class="fas fa-download"></i> <span class="hidden sm:inline">Descargar</span>
+            </button>
+        </div>
+    </nav>
+
+    <main id="main-content"
+        class="content-fade relative pt-32 pb-20 px-4 md:px-6 flex flex-col items-center justify-center min-h-screen text-center">
+        <div
+            class="absolute top-20 left-1/2 -translate-x-1/2 w-full md:w-[800px] h-[600px] bg-gold/15 blur-[150px] rounded-full -z-10">
+        </div>
+
+        <div
+            class="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-burgundy/10 border border-burgundy/20 text-burgundy text-xs font-bold tracking-widest uppercase">
+            <i class="fas fa-check-circle text-[10px] text-gold"></i> Versión 1.2.0 Actualizada
+        </div>
+
+        <h1 class="text-6xl sm:text-7xl md:text-8xl font-black mb-8 tracking-tight leading-[1.1]">
+            La Palabra <br><span class="gold-gradient">en tus manos</span>
+        </h1>
+
+        <p class="text-muted-sepia text-lg md:text-xl max-w-2xl mb-12 leading-relaxed">
+            Explora la Reina Valera 1960 con una interfaz premium, <span class="text-burgundy font-bold">lectura sin
+                conexión</span> y herramientas diseñadas para la meditación bíblica diaria.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-6">
+            <button onclick="toggleModal()"
+                class="btn-premium px-10 py-5 rounded-2xl font-bold text-lg flex items-center gap-4">
+                <i class="fas fa-mobile-alt"></i>
+                <span>Obtener para Android</span>
+            </button>
+            <a href="https://biblia-cristiana.vercel.app/" target="_blank"
+                class="btn-outline px-10 py-5 rounded-2xl font-bold text-lg flex items-center gap-4">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Leer en Navegador</span>
+            </a>
+        </div>
+
+        <div
+            class="mt-16 flex flex-wrap justify-center gap-8 text-muted-sepia text-xs font-bold uppercase tracking-[0.2em]">
+            <span class="flex items-center gap-2"><i class="fas fa-certificate text-gold"></i> Sin Anuncios</span>
+            <span class="flex items-center gap-2"><i class="fas fa-certificate text-gold"></i> 100% Gratuita</span>
+            <span class="flex items-center gap-2"><i class="fas fa-certificate text-gold"></i> Sin Internet</span>
+        </div>
+    </main>
+
+    <section id="features" class="py-24 px-4 md:px-6 bg-white/40">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16">
+                Diseñada para <span class="text-gold">Edificar</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="p-8 rounded-3xl feature-card">
+                    <div
+                        class="w-14 h-14 bg-burgundy/10 rounded-2xl flex items-center justify-center mb-6 text-burgundy">
+                        <i class="fas fa-bible text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-burgundy">Lectura Offline</h3>
+                    <p class="text-muted-sepia text-sm leading-relaxed">Accede a las Escrituras en cualquier lugar, sin
+                        gastar tus datos móviles.</p>
+                </div>
+
+                <div class="p-8 rounded-3xl feature-card">
+                    <div
+                        class="w-14 h-14 bg-burgundy/10 rounded-2xl flex items-center justify-center mb-6 text-burgundy">
+                        <i class="fas fa-pray text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-burgundy">Devocionales</h3>
+                    <p class="text-muted-sepia text-sm leading-relaxed">Recibe una palabra diaria para fortalecer tu fe
+                        y guiar tus pasos.</p>
+                </div>
+
+                <div class="p-8 rounded-3xl feature-card">
+                    <div
+                        class="w-14 h-14 bg-burgundy/10 rounded-2xl flex items-center justify-center mb-6 text-burgundy">
+                        <i class="fas fa-bookmark text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-burgundy">Marcadores</h3>
+                    <p class="text-muted-sepia text-sm leading-relaxed">Resalta versos y organiza tu estudio bíblico con
+                        notas integradas.</p>
+                </div>
+
+                <div class="p-8 rounded-3xl feature-card">
+                    <div
+                        class="w-14 h-14 bg-burgundy/10 rounded-2xl flex items-center justify-center mb-6 text-burgundy">
+                        <i class="fas fa-headphones text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-burgundy">Lectura por Voz</h3>
+                    <p class="text-muted-sepia text-sm leading-relaxed">Escucha las Escrituras con voz natural, ideal
+                        para momentos de meditación.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-0 md:px-6 relative overflow-hidden bg-white/20">
+        <div class="max-w-7xl mx-auto px-4 md:px-0">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-4">
+                Experiencia <span class="text-gold">Premium</span>
+            </h2>
+            <p class="text-muted-sepia text-center mb-16">Interfaz limpia y enfocada en lo más importante: la
+                edificación.</p>
+        </div>
+
+        <div class="carousel-container" id="carousel-container">
+            <div class="carousel-track" id="carousel-track">
+                <!-- Slides dinámicos generados por JS -->
+            </div>
+        </div>
+
+        <div class="flex justify-center items-center gap-6 mt-12 pb-10">
+            <button onclick="moveCarousel(-1)"
+                class="w-12 h-12 rounded-full border-2 border-burgundy/20 flex items-center justify-center text-burgundy hover:bg-burgundy hover:text-white transition-all shadow-sm">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="flex items-center gap-2 bg-burgundy/5 px-6 py-2 rounded-full border border-burgundy/10">
+                <span id="current-slide" class="font-bold text-burgundy">1</span>
+                <span class="text-muted-sepia font-bold">/</span>
+                <span id="total-slides" class="text-muted-sepia font-bold">4</span>
+            </div>
+            <button onclick="moveCarousel(1)"
+                class="w-12 h-12 rounded-full border-2 border-burgundy/20 flex items-center justify-center text-burgundy hover:bg-burgundy hover:text-white transition-all shadow-sm">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <section id="dev-info" class="py-24 px-4 md:px-6 bg-white/30 border-y border-burgundy/5">
+        <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <div>
+                <h2 class="text-4xl font-bold mb-6 bible-font text-burgundy">Sobre el <span
+                        class="text-gold">Proyecto</span></h2>
+                <p class="text-muted-sepia leading-relaxed mb-6">
+                    Esta aplicación nace en Life Code Studios bajo la visión de poner la Palabra de Dios al alcance
+                    de todos con excelencia técnica y espiritual.
+                </p>
+                <div class="flex items-center gap-4 p-5 rounded-3xl bg-white border border-burgundy/10 shadow-md">
+                    <div
+                        class="w-14 h-14 bg-burgundy/10 rounded-2xl flex items-center justify-center text-burgundy text-2xl">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-dark-sepia">Desarrollado por</div>
+                        <div class="text-burgundy font-bold text-sm">krafairus - Brandon Galvis (@krafairus)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold bible-font text-burgundy">Preguntas Frecuentes</h3>
+                <div class="p-6 rounded-2xl bg-white border border-burgundy/10 shadow-sm">
+                    <h4 class="font-bold mb-2 text-dark-sepia">¿Es realmente gratis?</h4>
+                    <p class="text-sm text-muted-sepia">Sí, Life Code Studios ofrece esta herramienta sin publicidad ni
+                        costo alguno.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white border border-burgundy/10 shadow-sm">
+                    <h4 class="font-bold mb-2 text-dark-sepia">¿Cómo colaborar?</h4>
+                    <p class="text-sm text-muted-sepia">Puedes apoyarnos reportando errores o haciendo sugerencias para
+                        nuevas opciones para la app en el github o puedes ayudar con una
+                        donación en <a href="https://ko-fi.com/lifecodestudios" target="_blank"
+                            class="text-burgundy font-bold hover:underline">Ko-fi </a>que sera de ayuda para hacer
+                        posible
+                        subir la app a la Play Store totalmente gratis.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-16 px-4 md:px-6 text-center border-t border-burgundy/10">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex justify-center gap-8 mb-10 text-3xl text-burgundy/40">
+                <a href="https://github.com/krafairus/biblia-cristiana-rv1960-app" target="_blank"
+                    class="hover:text-burgundy transition-colors" title="GitHub App"><i class="fab fa-github"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=61587882503975" target="_blank"
+                    class="hover:text-burgundy transition-colors"><i class="fab fa-facebook"></i></a>
+            </div>
+            <p class="text-muted-sepia text-sm mb-6 font-medium">© 2026 Life Code Studios - krafairus - Brandon Galvis.
+                Reina Valera
+                1960. Todos los derechos reservados.</p>
+            <div class="flex justify-center gap-6 text-xs text-muted-sepia font-bold uppercase tracking-widest mb-10">
+                <a href="terminos.html"
+                    class="hover:text-burgundy transition-colors underline-offset-4 hover:underline">Términos</a>
+                <span class="text-burgundy/10">•</span>
+                <a href="privacidad.html"
+                    class="hover:text-burgundy transition-colors underline-offset-4 hover:underline">Privacidad</a>
+            </div>
+            <p class="text-[9px] text-muted-sepia/60 uppercase tracking-[0.4em] max-w-3xl mx-auto leading-relaxed">
+                REINA-VALERA 1960 ® ES UNA MARCA REGISTRADA DE LA SOCIEDAD BÍBLICA AMERICANA PARA SER USADA EN TODO EL
+                MUNDO.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Modal Descarga Mejorado -->
+    <div id="modal" class="fixed inset-0 z-[100] items-center justify-center bg-burgundy/90 backdrop-blur-xl p-4">
+        <div
+            class="bg-white border-2 border-gold/40 w-full max-w-md rounded-[2.5rem] p-10 md:p-14 relative shadow-2xl overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16"></div>
+
+            <button onclick="toggleModal()"
+                class="absolute top-8 right-8 text-muted-sepia hover:text-burgundy text-4xl transition-colors">&times;</button>
+
+            <h2 class="text-3xl font-extrabold mb-4 bible-font text-burgundy">Obtener App</h2>
+            <p class="text-muted-sepia mb-10 leading-relaxed font-medium">Descarga la versión más reciente para Android
+                de manera segura.</p>
+
+            <div class="space-y-5">
+                <a href="https://github.com/krafairus/biblia-cristiana-rv1960-app/releases/download/v1.2.0/com.krafairus.bibliacristiana-1.2.0.apk"
+                    class="flex items-center justify-between p-7 bg-burgundy border-2 border-gold/30 rounded-3xl hover:bg-red-900 transition-all group shadow-lg">
+                    <div class="flex items-center gap-5">
+                        <div
+                            class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-gold text-3xl">
+                            <i class="fab fa-android"></i>
+                        </div>
+                        <div class="text-left">
+                            <span class="font-black text-white text-xl block">Descargar APK</span>
+                            <p class="text-xs text-white/70 font-bold uppercase tracking-tighter">Acceso Directo</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-arrow-down text-gold group-hover:translate-y-1 transition-transform text-xl"></i>
+                </a>
+
+                <a href="https://biblia-cristiana.vercel.app/" target="_blank"
+                    class="flex items-center justify-between p-7 bg-bone border-2 border-burgundy/10 rounded-3xl hover:border-burgundy/40 transition-all group">
+                    <div class="flex items-center gap-5">
+                        <div
+                            class="w-14 h-14 bg-burgundy/5 rounded-2xl flex items-center justify-center text-burgundy text-3xl">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div class="text-left">
+                            <span class="font-extrabold text-burgundy text-xl block">Versión Web</span>
+                            <p class="text-xs text-muted-sepia font-bold uppercase tracking-tighter">Uso en Navegador
+                            </p>
+                        </div>
+                    </div>
+                    <i
+                        class="fas fa-external-link-alt text-burgundy/40 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <div class="mt-10 p-5 bg-gold/10 rounded-2xl border border-gold/20">
+                <p class="text-[11px] text-center text-muted-sepia font-bold uppercase tracking-widest">
+                    <i class="fas fa-shield-virus mr-2 text-burgundy"></i>
+                    Software Seguro y Sin Rastreo
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Zoom Imagen -->
+    <div id="image-modal" class="fixed inset-0 z-[200] items-center justify-center bg-black/99 p-4 backdrop-blur-3xl">
+        <button onclick="closeImageModal()"
+            class="absolute top-10 right-10 text-white/40 hover:text-white text-5xl z-50 transition-all">&times;</button>
+        <div class="relative w-full h-full flex items-center justify-center">
+            <img id="expanded-image" class="max-w-[95%] max-h-[90%] object-contain shadow-2xl rounded-lg" src=""
+                alt="Capture">
+        </div>
+    </div>
+
+    <script>
+        // Lógica del Loader
+        window.addEventListener('load', () => {
+            const progressBar = document.getElementById('progress-bar');
+            const loader = document.getElementById('loader-wrapper');
+            const mainContent = document.getElementById('main-content');
+
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.visibility = 'hidden';
+                        mainContent.classList.add('content-visible');
+                    }, 800);
+                } else {
+                    width += Math.random() * 20;
+                    if (width > 100) width = 100;
+                    progressBar.style.width = width + '%';
+                }
+            }, 80);
+        });
+
+        // Modales
+        function toggleModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.toggle('active');
+            document.body.style.overflow = modal.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        function closeImageModal() {
+            document.getElementById('image-modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Lógica de Carrusel Infinito Real (Loop Continuo)
+        const slidesData = [
+            { img: 'resources/mockup1.png', title: 'Lectura Sagrada', desc: 'Una experiencia inmersiva para tu meditación' },
+            { img: 'resources/mockup2.png', title: 'Versículo Diario', desc: 'Inspiración divina cada mañana en tu pantalla' },
+            { img: 'resources/mockup3.png', title: 'Temas Elegantes', desc: 'Personaliza tu lectura con estilos clásicos' },
+            { img: 'resources/mockup4.png', title: 'Búsqueda Rápida', desc: 'Encuentra cualquier pasaje en segundos' }
+        ];
+
+        let currentActiveIndex = 0;
+        const totalRealSlides = slidesData.length;
+        const track = document.getElementById('carousel-track');
+
+        function initCarousel() {
+            track.innerHTML = '';
+            const displayData = [...slidesData, ...slidesData, ...slidesData];
+            const startIndex = totalRealSlides;
+
+            displayData.forEach((slide, i) => {
+                const div = document.createElement('div');
+                div.className = 'carousel-slide';
+                div.innerHTML = `
+                    <img src="${slide.img}" alt="${slide.title}" class="carousel-image">
+                    <div class="slide-caption">
+                        <h4 class="text-xl font-extrabold bible-font">${slide.title}</h4>
+                        <p class="text-gold-light text-sm font-medium">${slide.desc}</p>
+                    </div>
+                `;
+
+                div.onclick = () => {
+                    const realIndex = i % totalRealSlides;
+                    if (realIndex === currentActiveIndex) {
+                        openZoom(slide.img);
+                    } else {
+                        goToIndex(i);
+                    }
+                };
+
+                track.appendChild(div);
+            });
+
+            currentActiveIndex = 0;
+            updateCarouselPosition(false);
+        }
+
+        function updateCarouselPosition(smooth = true) {
+            const track = document.getElementById('carousel-track');
+            const slides = document.querySelectorAll('.carousel-slide');
+            if (slides.length === 0) return;
+
+            const slideWidth = slides[0].offsetWidth;
+            const gap = parseFloat(getComputedStyle(track).gap) || 0;
+            const totalWidthPerSlide = slideWidth + gap;
+
+            const centerIndex = totalRealSlides + currentActiveIndex;
+            const containerWidth = document.getElementById('carousel-container').offsetWidth;
+            const offset = (containerWidth / 2) - (slideWidth / 2) - (centerIndex * totalWidthPerSlide) - gap;
+
+            track.style.transition = smooth ? 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
+            track.style.transform = `translateX(${offset}px)`;
+
+            slides.forEach((s, i) => {
+                s.classList.toggle('active', (i % totalRealSlides) === currentActiveIndex);
+            });
+
+            document.getElementById('current-slide').textContent = currentActiveIndex + 1;
+            document.getElementById('total-slides').textContent = totalRealSlides;
+        }
+
+        function moveCarousel(direction) {
+            currentActiveIndex = (currentActiveIndex + direction + totalRealSlides) % totalRealSlides;
+            updateCarouselPosition();
+        }
+
+        function goToIndex(index) {
+            currentActiveIndex = index % totalRealSlides;
+            updateCarouselPosition();
+        }
+
+        function openZoom(img) {
+            document.getElementById('expanded-image').src = img;
+            document.getElementById('image-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        let autoPlay = setInterval(() => moveCarousel(1), 6000);
+        window.addEventListener('resize', () => updateCarouselPosition(false));
+        initCarousel();
+    </script>
+</body>
+
+</html>
