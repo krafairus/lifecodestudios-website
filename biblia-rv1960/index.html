@@ -330,8 +330,8 @@
         <div class="flex flex-wrap justify-center gap-6">
             <button onclick="toggleModal()"
                 class="btn-premium px-10 py-5 rounded-2xl font-bold text-lg flex items-center gap-4">
-                <i class="fas fa-mobile-alt"></i>
-                <span>Obtener para Android</span>
+                <i class="fas fa-compress-alt"></i>
+                <span>Instalar Aplicacion</span>
             </button>
             <a href="https://biblia-cristiana.vercel.app/" target="_blank"
                 class="btn-outline px-10 py-5 rounded-2xl font-bold text-lg flex items-center gap-4">
@@ -344,7 +344,7 @@
             class="mt-16 flex flex-wrap justify-center gap-8 text-muted-sepia text-xs font-bold uppercase tracking-[0.2em]">
             <span class="flex items-center gap-2"><i class="fas fa-certificate text-gold"></i> Sin Anuncios</span>
             <span class="flex items-center gap-2"><i class="fas fa-certificate text-gold"></i> 100% Gratuita</span>
-            <span class="flex items-center gap-2"><i class="fas fa-certificate text-gold"></i> Sin Internet (Algunas funciónes requieren internet)</span>
+            <span class="flex items-center gap-2"><i class="fas fa-certificate text-gold"></i> Sin Internet (Excepcion: devocional, actualizacion )</span>
         </div>
     </main>
 
@@ -496,57 +496,80 @@
     </footer>
 
     <!-- Modal Descarga Mejorado -->
-    <div id="modal" class="fixed inset-0 z-[100] items-center justify-center bg-[#FDF8F0] p-4">     
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] h-[600px] bg-gold/20 blur-[120px] rounded-full -z-10"></div>
-        <div
-            class="bg-white border-2 border-gold/40 w-full max-w-md rounded-[2.5rem] p-10 md:p-14 relative shadow-2xl overflow-hidden">
+<div id="modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">     
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[500px] h-[500px] bg-gold/20 blur-[100px] rounded-full -z-10"></div>
+        
+        <div class="bg-white border-2 border-gold/40 w-full max-w-lg rounded-[2rem] flex flex-col max-h-[90vh] shadow-2xl relative">
 
             <button onclick="toggleModal()"
-                class="absolute top-8 right-8 text-muted-sepia hover:text-burgundy text-4xl transition-colors">&times;</button>
+                class="absolute top-4 right-6 text-muted-sepia hover:text-burgundy text-3xl z-10 transition-colors">&times;</button>
 
-            <h2 class="text-3xl font-extrabold mb-4 bible-font text-burgundy">Obtener App</h2>
-            <p class="text-muted-sepia mb-10 leading-relaxed font-medium">Descarga la versión más reciente para Android
-                de manera segura.</p>
+            <div class="p-6 md:p-10 overflow-y-auto custom-scrollbar">
+                <h2 class="text-2xl md:text-3xl font-extrabold mb-2 bible-font text-burgundy">Obtener App</h2>
+                <p class="text-muted-sepia mb-6 text-sm md:text-base leading-relaxed font-medium">Selecciona tu plataforma para descargar la versión 1.2.4.</p>
 
-            <div class="space-y-5">
-                <a href="https://github.com/krafairus/biblia-cristiana-rv1960-app/releases/download/v1.2.4/com.krafairus.bibliacristiana-1.2.4.apk"
-                    class="flex items-center justify-between p-7 bg-burgundy border-2 border-gold/30 rounded-3xl hover:bg-red-900 transition-all group shadow-lg">
-                    <div class="flex items-center gap-5">
-                        <div
-                            class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-gold text-3xl">
-                            <i class="fab fa-android"></i>
+                <div class="space-y-3">
+                    <a href="https://github.com/krafairus/biblia-cristiana-rv1960-app/releases/download/v1.2.4/com.krafairus.bibliacristiana-1.2.4.apk"
+                        class="flex items-center justify-between p-4 bg-burgundy border border-gold/30 rounded-xl hover:bg-red-900 transition-all group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-gold text-xl">
+                                <i class="fab fa-android"></i>
+                            </div>
+                            <div class="text-left">
+                                <span class="font-bold text-white text-base block">Android (APK)</span>
+                                <p class="text-[9px] text-white/70 font-bold uppercase tracking-wider">Instalación Directa</p>
+                            </div>
                         </div>
-                        <div class="text-left">
-                            <span class="font-black text-white text-xl block">Descargar APK</span>
-                            <p class="text-xs text-white/70 font-bold uppercase tracking-tighter">Acceso Directo</p>
+                        <i class="fas fa-download text-gold group-hover:translate-y-1 transition-transform text-sm"></i>
+                    </a>
+
+                    <a href="https://github.com/krafairus/biblia-cristiana-rv1960-online/releases/download/v1.2.4/Biblia.Cristiana.RV.1960.Setup.1.2.4.exe"
+                        class="flex items-center justify-between p-4 bg-[#0078D4] border border-white/20 rounded-xl hover:opacity-90 transition-all group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-xl">
+                                <i class="fab fa-windows"></i>
+                            </div>
+                            <div class="text-left">
+                                <span class="font-bold text-white text-base block">Windows</span>
+                                <p class="text-[9px] text-white/70 font-bold uppercase tracking-wider">Instalador .exe</p>
+                            </div>
                         </div>
+                        <i class="fas fa-download text-white/80 group-hover:translate-y-1 transition-transform text-sm"></i>
+                    </a>
+
+                    <a href="https://github.com/krafairus/biblia-cristiana-rv1960-online/releases/download/v1.2.4/Biblia.Cristiana.RV.1960-1.2.4.AppImage"
+                        class="flex items-center justify-between p-4 bg-[#333333] border border-white/10 rounded-xl hover:bg-black transition-all group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-xl">
+                                <i class="fab fa-linux"></i>
+                            </div>
+                            <div class="text-left">
+                                <span class="font-bold text-white text-base block">Linux</span>
+                                <p class="text-[9px] text-white/70 font-bold uppercase tracking-wider">AppImage</p>
+                            </div>
+                        </div>
+                        <i class="fas fa-download text-white/80 group-hover:translate-y-1 transition-transform text-sm"></i>
+                    </a>
+
+                    <div class="relative py-2">
+                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-burgundy/10"></div></div>
+                        <div class="relative flex justify-center text-[10px] uppercase font-bold text-muted-sepia"><span class="bg-white px-2">Otras opciones</span></div>
                     </div>
-                    <i class="fas fa-arrow-down text-gold group-hover:translate-y-1 transition-transform text-xl"></i>
-                </a>
 
-                <a href="https://biblia-cristiana.vercel.app/" target="_blank"
-                    class="flex items-center justify-between p-7 bg-bone border-2 border-burgundy/10 rounded-3xl hover:border-burgundy/40 transition-all group">
-                    <div class="flex items-center gap-5">
-                        <div
-                            class="w-14 h-14 bg-burgundy/5 rounded-2xl flex items-center justify-center text-burgundy text-3xl">
-                            <i class="fas fa-desktop"></i>
+                    <a href="https://biblia-cristiana.vercel.app/" target="_blank"
+                        class="flex items-center justify-between p-4 bg-bone border border-burgundy/10 rounded-xl hover:border-burgundy/40 transition-all group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-burgundy/5 rounded-lg flex items-center justify-center text-burgundy text-xl">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div class="text-left">
+                                <span class="font-bold text-burgundy text-base block">Versión Web</span>
+                                <p class="text-[9px] text-muted-sepia font-bold uppercase tracking-wider">Sin instalación</p>
+                            </div>
                         </div>
-                        <div class="text-left">
-                            <span class="font-extrabold text-burgundy text-xl block">Versión Web</span>
-                            <p class="text-xs text-muted-sepia font-bold uppercase tracking-tighter">Uso en Navegador
-                            </p>
-                        </div>
-                    </div>
-                    <i
-                        class="fas fa-external-link-alt text-burgundy/40 group-hover:translate-x-1 transition-transform"></i>
-                </a>
-            </div>
-
-            <div class="mt-10 p-5 bg-gold/10 rounded-2xl border border-gold/20">
-                <p class="text-[11px] text-center text-muted-sepia font-bold uppercase tracking-widest">
-                    <i class="fas fa-shield-virus mr-2 text-burgundy"></i>
-                    Software Seguro y Sin Rastreo
-                </p>
+                        <i class="fas fa-external-link-alt text-burgundy/40 group-hover:translate-x-1 transition-transform text-sm"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
