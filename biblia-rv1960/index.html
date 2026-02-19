@@ -52,6 +52,25 @@
             color: var(--burgundy);
         }
 
+/* Clase para el modo PC: Imágenes horizontales */
+.carousel-track.pc-mode .carousel-slide {
+    width: 600px; /* Más ancho para PC */
+}
+
+.carousel-track.pc-mode .carousel-image {
+    height: 350px; /* Menos alto para mantener proporción 16:9 aprox */
+}
+
+/* Ajuste responsivo para PC en pantallas pequeñas */
+@media (max-width: 768px) {
+    .carousel-track.pc-mode .carousel-slide {
+        width: 320px;
+    }
+    .carousel-track.pc-mode .carousel-image {
+        height: 200px;
+    }
+}
+
         /* --- Estilos del Loader Elegante --- */
         #loader-wrapper {
             position: fixed;
@@ -398,20 +417,27 @@
         </div>
     </section>
 
-    <section class="py-24 px-0 md:px-6 relative overflow-hidden bg-white/20">
-        <div class="max-w-7xl mx-auto px-4 md:px-0">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-4">
-                Experiencia <span class="text-gold">Premium</span>
-            </h2>
-            <p class="text-muted-sepia text-center mb-16">Interfaz limpia y enfocada en lo más importante: la
-                edificación.</p>
+<section class="py-24 px-0 md:px-6 relative overflow-hidden bg-white/20">
+    <div class="max-w-7xl mx-auto px-4 md:px-0 text-center">
+        <h2 class="text-4xl md:text-5xl font-extrabold mb-4">
+            Experiencia <span class="text-gold">Premium</span>
+        </h2>
+        <p class="text-muted-sepia mb-8">Interfaz limpia y enfocada en lo más importante: la edificación.</p>
+        
+        <div class="flex justify-center gap-4 mb-12">
+            <button onclick="switchCategory('mobile')" id="btn-mobile" class="px-6 py-2 rounded-full font-bold transition-all border-2 border-burgundy bg-burgundy text-white shadow-lg">
+                <i class="fas fa-mobile-alt mr-2"></i> Móvil
+            </button>
+            <button onclick="switchCategory('pc')" id="btn-pc" class="px-6 py-2 rounded-full font-bold transition-all border-2 border-burgundy text-burgundy hover:bg-burgundy hover:text-white">
+                <i class="fas fa-laptop mr-2"></i> Laptop / PC
+            </button>
         </div>
+    </div>
 
-        <div class="carousel-container" id="carousel-container">
-            <div class="carousel-track" id="carousel-track">
-                <!-- Slides dinámicos generados por JS -->
+    <div class="carousel-container" id="carousel-container">
+        <div class="carousel-track" id="carousel-track">
             </div>
-        </div>
+    </div>
 
         <div class="flex justify-center items-center gap-6 mt-12 pb-10">
             <button onclick="moveCarousel(-1)"
@@ -584,130 +610,174 @@
         </div>
     </div>
 
-    <script>
-        // Lógica del Loader
-        window.addEventListener('load', () => {
-            const progressBar = document.getElementById('progress-bar');
-            const loader = document.getElementById('loader-wrapper');
-            const mainContent = document.getElementById('main-content');
+<script>
+    // Lógica del Loader
+    window.addEventListener('load', () => {
+        const progressBar = document.getElementById('progress-bar');
+        const loader = document.getElementById('loader-wrapper');
+        const mainContent = document.getElementById('main-content');
 
-            let width = 0;
-            const interval = setInterval(() => {
-                if (width >= 100) {
-                    clearInterval(interval);
-                    loader.style.opacity = '0';
-                    setTimeout(() => {
-                        loader.style.visibility = 'hidden';
-                        mainContent.classList.add('content-visible');
-                    }, 800);
-                } else {
-                    width += Math.random() * 20;
-                    if (width > 100) width = 100;
-                    progressBar.style.width = width + '%';
-                }
-            }, 80);
-        });
+        let width = 0;
+        const interval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(interval);
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.visibility = 'hidden';
+                    mainContent.classList.add('content-visible');
+                }, 800);
+            } else {
+                width += Math.random() * 20;
+                if (width > 100) width = 100;
+                progressBar.style.width = width + '%';
+            }
+        }, 80);
+    });
 
-        // Modales
-        function toggleModal() {
-            const modal = document.getElementById('modal');
-            modal.classList.toggle('active');
-            document.body.style.overflow = modal.classList.contains('active') ? 'hidden' : 'auto';
-        }
+    // Modales
+    function toggleModal() {
+        const modal = document.getElementById('modal');
+        modal.classList.toggle('active');
+        document.body.style.overflow = modal.classList.contains('active') ? 'hidden' : 'auto';
+    }
 
-        function closeImageModal() {
-            document.getElementById('image-modal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+    function closeImageModal() {
+        document.getElementById('image-modal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
 
-        // Lógica de Carrusel Infinito Real (Loop Continuo)
-        const slidesData = [
+    function openZoom(img) {
+        document.getElementById('expanded-image').src = img;
+        document.getElementById('image-modal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // --- Lógica del Carrusel Multiplataforma ---
+
+    const slidesData = {
+        mobile: [
             { img: 'resources/mockup1.png', title: 'Lectura Sagrada', desc: 'Una experiencia inmersiva para tu meditación' },
             { img: 'resources/mockup2.png', title: 'Versículo Diario', desc: 'Inspiración divina cada mañana en tu pantalla' },
             { img: 'resources/mockup3.png', title: 'Temas Elegantes', desc: 'Personaliza tu lectura con estilos clásicos' },
             { img: 'resources/mockup4.png', title: 'Búsqueda Rápida', desc: 'Encuentra cualquier pasaje en segundos' }
-        ];
+        ],
+        pc: [
+            { img: 'resources/pc_mockup1.png', title: 'Vista de Escritorio', desc: 'Panel extendido para un estudio profundo' },
+            { img: 'resources/pc_mockup2.png', title: 'Multitarea Eficiente', desc: 'Navega entre libros y capítulos con facilidad' },
+            { img: 'resources/pc_mockup3.png', title: 'Interfaz Adaptativa', desc: 'Optimizado para monitores de distintas resoluciones' },
+            { img: 'resources/pc_mockup4.png', title: 'Temas alegantes', desc: 'Cambie el modo y la paleta de colores de la app de forma facil.' }
+        ]
+    };
 
-        let currentActiveIndex = 0;
-        const totalRealSlides = slidesData.length;
-        const track = document.getElementById('carousel-track');
+    let currentCategory = 'mobile';
+    let currentActiveIndex = 0;
+    const track = document.getElementById('carousel-track');
+    let autoPlay;
 
-        function initCarousel() {
-            track.innerHTML = '';
-            const displayData = [...slidesData, ...slidesData, ...slidesData];
-            const startIndex = totalRealSlides;
+    function switchCategory(category) {
+        if (currentCategory === category) return;
+        
+        currentCategory = category;
+        currentActiveIndex = 0;
 
-            displayData.forEach((slide, i) => {
-                const div = document.createElement('div');
-                div.className = 'carousel-slide';
-                div.innerHTML = `
-                    <img src="${slide.img}" alt="${slide.title}" class="carousel-image">
-                    <div class="slide-caption">
-                        <h4 class="text-xl font-extrabold bible-font">${slide.title}</h4>
-                        <p class="text-gold-light text-sm font-medium">${slide.desc}</p>
-                    </div>
-                `;
+        // Actualizar UI de los botones
+        const btnMobile = document.getElementById('btn-mobile');
+        const btnPc = document.getElementById('btn-pc');
 
-                div.onclick = () => {
-                    const realIndex = i % totalRealSlides;
-                    if (realIndex === currentActiveIndex) {
-                        openZoom(slide.img);
-                    } else {
-                        goToIndex(i);
-                    }
-                };
-
-                track.appendChild(div);
-            });
-
-            currentActiveIndex = 0;
-            updateCarouselPosition(false);
+        if (category === 'mobile') {
+            btnMobile.className = "px-6 py-2 rounded-full font-bold transition-all border-2 border-burgundy bg-burgundy text-white shadow-lg";
+            btnPc.className = "px-6 py-2 rounded-full font-bold transition-all border-2 border-burgundy text-burgundy hover:bg-burgundy hover:text-white";
+            track.classList.remove('pc-mode');
+        } else {
+            btnPc.className = "px-6 py-2 rounded-full font-bold transition-all border-2 border-burgundy bg-burgundy text-white shadow-lg";
+            btnMobile.className = "px-6 py-2 rounded-full font-bold transition-all border-2 border-burgundy text-burgundy hover:bg-burgundy hover:text-white";
+            track.classList.add('pc-mode');
         }
 
-        function updateCarouselPosition(smooth = true) {
-            const track = document.getElementById('carousel-track');
-            const slides = document.querySelectorAll('.carousel-slide');
-            if (slides.length === 0) return;
-
-            const slideWidth = slides[0].offsetWidth;
-            const gap = parseFloat(getComputedStyle(track).gap) || 0;
-            const totalWidthPerSlide = slideWidth + gap;
-
-            const centerIndex = totalRealSlides + currentActiveIndex;
-            const containerWidth = document.getElementById('carousel-container').offsetWidth;
-            const offset = (containerWidth / 2) - (slideWidth / 2) - (centerIndex * totalWidthPerSlide) - gap;
-
-            track.style.transition = smooth ? 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
-            track.style.transform = `translateX(${offset}px)`;
-
-            slides.forEach((s, i) => {
-                s.classList.toggle('active', (i % totalRealSlides) === currentActiveIndex);
-            });
-
-            document.getElementById('current-slide').textContent = currentActiveIndex + 1;
-            document.getElementById('total-slides').textContent = totalRealSlides;
-        }
-
-        function moveCarousel(direction) {
-            currentActiveIndex = (currentActiveIndex + direction + totalRealSlides) % totalRealSlides;
-            updateCarouselPosition();
-        }
-
-        function goToIndex(index) {
-            currentActiveIndex = index % totalRealSlides;
-            updateCarouselPosition();
-        }
-
-        function openZoom(img) {
-            document.getElementById('expanded-image').src = img;
-            document.getElementById('image-modal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        let autoPlay = setInterval(() => moveCarousel(1), 6000);
-        window.addEventListener('resize', () => updateCarouselPosition(false));
         initCarousel();
-    </script>
+        resetAutoPlay();
+    }
+
+    function initCarousel() {
+        track.innerHTML = '';
+        const data = slidesData[currentCategory];
+        const totalRealSlides = data.length;
+
+        // Crear set triple para efecto de scroll infinito
+        const displayData = [...data, ...data, ...data];
+
+        displayData.forEach((slide, i) => {
+            const div = document.createElement('div');
+            div.className = 'carousel-slide';
+            div.innerHTML = `
+                <img src="${slide.img}" alt="${slide.title}" class="carousel-image">
+                <div class="slide-caption">
+                    <h4 class="text-xl font-extrabold bible-font">${slide.title}</h4>
+                    <p class="text-gold-light text-sm font-medium">${slide.desc}</p>
+                </div>
+            `;
+
+            div.onclick = () => {
+                const realIndex = i % totalRealSlides;
+                if (realIndex === currentActiveIndex) {
+                    openZoom(slide.img);
+                } else {
+                    currentActiveIndex = realIndex;
+                    updateCarouselPosition();
+                }
+            };
+
+            track.appendChild(div);
+        });
+
+        updateCarouselPosition(false);
+    }
+
+    function updateCarouselPosition(smooth = true) {
+        const slides = document.querySelectorAll('.carousel-slide');
+        if (slides.length === 0) return;
+
+        const data = slidesData[currentCategory];
+        const totalRealSlides = data.length;
+        const slideWidth = slides[0].offsetWidth;
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        const totalWidthPerSlide = slideWidth + gap;
+
+        // El centro es el set del medio (index + totalRealSlides)
+        const centerIndex = totalRealSlides + currentActiveIndex;
+        const containerWidth = document.getElementById('carousel-container').offsetWidth;
+        const offset = (containerWidth / 2) - (slideWidth / 2) - (centerIndex * totalWidthPerSlide);
+
+        track.style.transition = smooth ? 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
+        track.style.transform = `translateX(${offset}px)`;
+
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', (i % totalRealSlides) === currentActiveIndex);
+        });
+
+        document.getElementById('current-slide').textContent = currentActiveIndex + 1;
+        document.getElementById('total-slides').textContent = totalRealSlides;
+    }
+
+    function moveCarousel(direction) {
+        const totalRealSlides = slidesData[currentCategory].length;
+        currentActiveIndex = (currentActiveIndex + direction + totalRealSlides) % totalRealSlides;
+        updateCarouselPosition();
+        resetAutoPlay();
+    }
+
+    function resetAutoPlay() {
+        clearInterval(autoPlay);
+        autoPlay = setInterval(() => moveCarousel(1), 6000);
+    }
+
+    // Event Listeners
+    window.addEventListener('resize', () => updateCarouselPosition(false));
+    
+    // Inicialización al cargar
+    initCarousel();
+    resetAutoPlay();
+</script>
 </body>
 
 </html>
