@@ -63,11 +63,12 @@
 
 /* Ajuste responsivo para PC en pantallas pequeñas */
 @media (max-width: 768px) {
-    .carousel-track.pc-mode .carousel-slide {
-        width: 320px;
+    .carousel-slide {
+        width: 280px; /* Un tamaño estándar que deja ver un poco de las laterales */
     }
-    .carousel-track.pc-mode .carousel-image {
-        height: 200px;
+    
+    .carousel-track.pc-mode .carousel-slide {
+        width: 300px; /* Ancho para las capturas de PC en móvil */
     }
 }
 
@@ -169,24 +170,24 @@
         }
 
         /* --- Carrusel Infinito Real --- */
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            max-width: 100%;
-            margin: 0 auto;
-            overflow: hidden;
-            padding: 3rem 0;
-            display: flex;
-            align-items: center;
-        }
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 2rem 0; /* Reducido para mejor ajuste en móvil */
+    display: flex;
+    align-items: center;
+}
 
-        .carousel-track {
-            display: flex;
-            gap: 2rem;
-            transition: transform 0.5s ease-out;
-            will-change: transform;
-            padding: 0 2rem;
-        }
+.carousel-track {
+    display: flex;
+    gap: 1.5rem; /* Ajustado */
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); /* Transición más suave */
+    will-change: transform;
+    padding: 0; /* IMPORTANTE: Esto debe ser 0 para no desviar el cálculo */
+}
 
         .carousel-slide {
             flex: 0 0 auto;
@@ -733,31 +734,38 @@
         updateCarouselPosition(false);
     }
 
-    function updateCarouselPosition(smooth = true) {
-        const slides = document.querySelectorAll('.carousel-slide');
-        if (slides.length === 0) return;
+function updateCarouselPosition(smooth = true) {
+    const slides = document.querySelectorAll('.carousel-slide');
+    if (slides.length === 0) return;
 
-        const data = slidesData[currentCategory];
-        const totalRealSlides = data.length;
-        const slideWidth = slides[0].offsetWidth;
-        const gap = parseFloat(getComputedStyle(track).gap) || 0;
-        const totalWidthPerSlide = slideWidth + gap;
+    const data = slidesData[currentCategory];
+    const totalRealSlides = data.length;
+    
+    // Obtenemos el ancho de la diapositiva incluyendo sus márgenes si los tuviera
+    const slideWidth = slides[0].offsetWidth; 
+    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    
+    // Calculamos el índice central basado en el set triple
+    const centerIndex = totalRealSlides + currentActiveIndex;
+    
+    const container = document.getElementById('carousel-container');
+    const containerWidth = container.offsetWidth;
+    
+    // FÓRMULA CORREGIDA:
+    // Centra el slide activo exactamente en la mitad del contenedor
+    const offset = (containerWidth / 2) - (slideWidth / 2) - (centerIndex * (slideWidth + gap));
 
-        // El centro es el set del medio (index + totalRealSlides)
-        const centerIndex = totalRealSlides + currentActiveIndex;
-        const containerWidth = document.getElementById('carousel-container').offsetWidth;
-        const offset = (containerWidth / 2) - (slideWidth / 2) - (centerIndex * totalWidthPerSlide);
+    track.style.transition = smooth ? 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
+    track.style.transform = `translateX(${offset}px)`;
 
-        track.style.transition = smooth ? 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
-        track.style.transform = `translateX(${offset}px)`;
+    // Actualizar clases activas
+    slides.forEach((s, i) => {
+        s.classList.toggle('active', (i % totalRealSlides) === currentActiveIndex);
+    });
 
-        slides.forEach((s, i) => {
-            s.classList.toggle('active', (i % totalRealSlides) === currentActiveIndex);
-        });
-
-        document.getElementById('current-slide').textContent = currentActiveIndex + 1;
-        document.getElementById('total-slides').textContent = totalRealSlides;
-    }
+    document.getElementById('current-slide').textContent = currentActiveIndex + 1;
+    document.getElementById('total-slides').textContent = totalRealSlides;
+}
 
     function moveCarousel(direction) {
         const totalRealSlides = slidesData[currentCategory].length;
